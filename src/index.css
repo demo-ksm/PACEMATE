@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-stone: #EDEAE2;
+    --bg-card: #F7F5F0;
+    --teal-primary: #276F6E;
+    --teal-hover: #1E5756;
+    --orange-accent: #E85D2C;
+    --orange-hover: #CF4E20;
+    --text-dark: #2C3333;
+    --text-muted: #5C6565;
+  }
+
+  body {
+    background-color: var(--bg-stone);
+    color: var(--text-dark);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Custom Race Bib Card Motif */
+.bib-card {
+  background-color: #FBF9F5;
+  border: 2px solid #2C3333;
+  box-shadow: 4px 4px 0px #2C3333;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.bib-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px #2C3333;
+}
+
+/* Corner Pinhole Dots for Bib Look */
+.bib-pinhole-tl {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 10px;
+  height: 10px;
+  background-color: #EDEAE2;
+  border: 1.5px solid #2C3333;
+  border-radius: 50%;
+}
+
+.bib-pinhole-tr {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 10px;
+  height: 10px;
+  background-color: #EDEAE2;
+  border: 1.5px solid #2C3333;
+  border-radius: 50%;
+}
+
+/* Race Bib Badge */
+.bib-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border: 1.5px solid #2C3333;
+  box-shadow: 2px 2px 0px #2C3333;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.bib-badge-teal {
+  background-color: #276F6E;
+  color: #FFFFFF;
+}
+
+.bib-badge-orange {
+  background-color: #E85D2C;
+  color: #FFFFFF;
+}
+
+.bib-badge-stone {
+  background-color: #E4E0D5;
+  color: #2C3333;
+}
+
+.bib-badge-success {
+  background-color: #2E7D32;
+  color: #FFFFFF;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #EDEAE2;
+}
+::-webkit-scrollbar-thumb {
+  background: #276F6E;
+  border-radius: 3px;
+}

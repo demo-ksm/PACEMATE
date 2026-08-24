@@ -1,0 +1,111 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  phone         String
+  email         String?
+  role          String         // "ORGANIZER" | "RUNNER"
+  clubId        String?
+  createdAt     DateTime       @default(now())
+
+  club          Club?          @relation("ClubUserRelation", fields: [clubId], references: [id])
+  ownedClub     Club?          @relation("ClubOwnerRelation")
+  memberships   ClubMember[]
+  registrations Registration[]
+  waitlists     Waitlist[]
+}
+
+model Club {
+  id          String       @id @default(uuid())
+  name        String
+  city        String
+  description String
+  ownerUserId String       @unique
+  createdAt   DateTime     @default(now())
+
+  owner       User         @relation("ClubOwnerRelation", fields: [ownerUserId], references: [id])
+  users       User[]       @relation("ClubUserRelation")
+  members     ClubMember[]
+  events      Event[]
+}
+
+model ClubMember {
+  id        String   @id @default(uuid())
+  clubId    String
+  userId    String
+  joinedAt  DateTime @default(now())
+
+  club      Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, userId])
+}
+
+model Event {
+  id            String         @id @default(uuid())
+  clubId        String
+  name          String
+  description   String
+  date          String         // YYYY-MM-DD
+  time          String         // HH:MM
+  location      String
+  capacity      Int
+  price         Float          @default(0) // 0 = Free
+  paceGroups    String         // Comma-separated or JSON string
+  coverImageUrl String?
+  checkInCode   String         // 6-digit backup PIN code
+  createdBy     String
+  createdAt     DateTime       @default(now())
+
+  club          Club           @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+  waitlists     Waitlist[]
+}
+
+model Registration {
+  id            String    @id @default(uuid())
+  eventId       String
+  userId        String
+  paceGroup     String
+  registeredAt  DateTime  @default(now())
+  attended      Boolean   @default(false)
+  checkedInAt   DateTime?
+  paymentStatus String    @default("NOT_REQUIRED") // "NOT_REQUIRED" | "PENDING" | "PAID"
+
+  event         Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+model Waitlist {
+  id        String   @id @default(uuid())
+  eventId   String
+  userId    String
+  paceGroup String
+  joinedAt  DateTime @default(now())
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+model NotificationLog {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  channel   String
+  recipient String
+  message   String
+  status    String
+  createdAt DateTime @default(now())
+}
